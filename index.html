@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研發型業務每日跨界看板 | 2026-05-08</title>
+<style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #0f1629;
+    --bg-card: #141c2e;
+    --bg-card-hover: #1a2438;
+    --accent-blue: #00d4ff;
+    --accent-lime: #a0ff4f;
+    --accent-orange: #ff8c42;
+    --accent-purple: #b47aff;
+    --text-primary: #e8edf5;
+    --text-secondary: #8a9ab5;
+    --text-muted: #4a5a75;
+    --border-glow: rgba(0, 212, 255, 0.15);
+    --border-subtle: rgba(255,255,255,0.06);
+    --tag-bg: rgba(0, 212, 255, 0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0d1530 50%, #0a1220 100%);
+    border-bottom: 1px solid var(--border-glow);
+    padding: 28px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+  }
+  .header-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .header-title-group { display: flex; flex-direction: column; gap: 4px; }
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    font-weight: 600;
+  }
+  .header-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+  .header-title span { color: var(--accent-blue); }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .date-badge {
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent-blue);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .live-dot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--accent-lime);
+    font-weight: 600;
+  }
+  .live-dot::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--accent-lime);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-lime);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px 40px 0;
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .tab {
+    padding: 10px 22px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    border-bottom: none;
+    color: var(--text-secondary);
+    background: transparent;
+    position: relative;
+    bottom: -1px;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text-primary); background: var(--bg-card); }
+  .tab.active {
+    background: var(--bg-card);
+    border-color: var(--border-subtle);
+    border-bottom-color: var(--bg-card);
+    color: var(--accent-blue);
+  }
+  .tab .tab-icon { margin-right: 8px; }
+  .tab .count {
+    margin-left: 8px;
+    background: rgba(0,212,255,0.15);
+    color: var(--accent-blue);
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 28px 40px 60px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .section-title-group {}
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .section-stats {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stat-chip .num { font-weight: 700; color: var(--text-primary); }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 16px;
+  }
+  .cards-grid.wide { grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .card:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(0,212,255,0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,255,0.1);
+  }
+  .card:hover::before { opacity: 1; }
+
+  /* accent colors per section */
+  .card.science::before { background: linear-gradient(90deg, var(--accent-blue), #0099cc); }
+  .card.science:hover { border-color: rgba(0,212,255,0.2); }
+  .card.market::before { background: linear-gradient(90deg, var(--accent-lime), #5fa000); }
+  .card.market:hover { border-color: rgba(160,255,79,0.2); }
+  .card.crossdomain::before { background: linear-gradient(90deg, var(--accent-purple), #7a4acc); }
+  .card.crossdomain:hover { border-color: rgba(180,122,255,0.2); }
+
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .tag.blue { background: rgba(0,212,255,0.12); color: var(--accent-blue); }
+  .tag.lime { background: rgba(160,255,79,0.12); color: var(--accent-lime); }
+  .tag.orange { background: rgba(255,140,66,0.12); color: var(--accent-orange); }
+  .tag.purple { background: rgba(180,122,255,0.12); color: var(--accent-purple); }
+  .tag.red { background: rgba(255,80,80,0.12); color: #ff6666; }
+
+  .card-number {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 28px;
+    text-align: right;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .card-summary {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.025);
+    border-left: 2px solid;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 12px;
+  }
+  .card.science .card-summary { border-left-color: var(--accent-blue); }
+  .card.market .card-summary { border-left-color: var(--accent-lime); }
+  .card.crossdomain .card-summary { border-left-color: var(--accent-purple); }
+
+  .card-insight {
+    font-size: 12px;
+    color: #e0a050;
+    background: rgba(255,160,60,0.06);
+    border: 1px solid rgba(255,160,60,0.15);
+    border-radius: 6px;
+    padding: 8px 10px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .card-insight::before {
+    content: '💡 ';
+    font-size: 12px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .card-source {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-source::before { content: '↗'; font-size: 10px; }
+  .card-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  /* ── DATA POINT HIGHLIGHT ── */
+  .data-point {
+    display: inline-block;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    font-family: 'SF Mono', 'Consolas', monospace;
+  }
+  .data-point.lime {
+    background: rgba(160,255,79,0.08);
+    border-color: rgba(160,255,79,0.2);
+    color: var(--accent-lime);
+  }
+  .data-point.orange {
+    background: rgba(255,140,66,0.08);
+    border-color: rgba(255,140,66,0.2);
+    color: var(--accent-orange);
+  }
+
+  /* ── SUMMARY BAR ── */
+  .summary-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .summary-kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .kpi-value {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .kpi-desc { font-size: 12px; color: var(--text-secondary); }
+
+  /* ── OVERVIEW TAB ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 1100px) { .overview-grid { grid-template-columns: 1fr; } }
+  .overview-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .overview-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+  }
+  .overview-section.s1::after { background: linear-gradient(90deg, var(--accent-blue), #0077aa); }
+  .overview-section.s2::after { background: linear-gradient(90deg, var(--accent-lime), #5fa000); }
+  .overview-section.s3::after { background: linear-gradient(90deg, var(--accent-purple), #7a4acc); }
+  .overview-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ov-items { display: flex; flex-direction: column; gap: 10px; }
+  .ov-item {
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    border-left: 2px solid;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .ov-item:hover { background: rgba(255,255,255,0.05); }
+  .overview-section.s1 .ov-item { border-left-color: var(--accent-blue); }
+  .overview-section.s2 .ov-item { border-left-color: var(--accent-lime); }
+  .overview-section.s3 .ov-item { border-left-color: var(--accent-purple); }
+  .ov-item-title { font-size: 12px; font-weight: 600; color: var(--text-primary); line-height: 1.4; margin-bottom: 3px; }
+  .ov-item-summary { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+  .signal-table {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .signal-table-title {
+    padding: 16px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    padding: 10px 16px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(255,255,255,0.015);
+  }
+  td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  td.domain { font-weight: 700; color: var(--text-primary); }
+  td.signal { color: var(--text-primary); }
+  td.action { color: var(--accent-lime); font-size: 12px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .header, .nav-tabs, .main { padding-left: 16px; padding-right: 16px; }
+    .cards-grid, .cards-grid.wide { grid-template-columns: 1fr; }
+    .overview-grid { grid-template-columns: 1fr; }
+    .header-title { font-size: 18px; }
+    .summary-bar { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── EXPAND/COLLAPSE for card detail ── */
+  .card-detail { display: none; margin-top: 12px; border-top: 1px solid var(--border-subtle); padding-top: 12px; }
+  .card.expanded .card-detail { display: block; }
+  .card-detail p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 8px; }
+  .card-detail strong { color: var(--text-primary); }
+  .expand-btn {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .expand-btn:hover { color: var(--accent-blue); }
+  .expand-icon { transition: transform 0.2s; }
+  .card.expanded .expand-icon { transform: rotate(180deg); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-primary); }
+  ::-webkit-scrollbar-thumb { background: #2a3a55; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a5080; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-title-group">
+      <div class="header-eyebrow">BM GROUP · R&D SALES INTELLIGENCE</div>
+      <div class="header-title">研發型業務 <span>每日跨界看板</span></div>
+    </div>
+    <div class="header-meta">
+      <div class="date-badge">📅 2026-05-08</div>
+      <div class="live-dot">已更新</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <div class="tab active" onclick="switchTab('overview')"><span class="tab-icon">⬡</span>總覽<span class="count">3</span></div>
+  <div class="tab" onclick="switchTab('science')"><span class="tab-icon">🔬</span>科學底層機制<span class="count">14</span></div>
+  <div class="tab" onclick="switchTab('market')"><span class="tab-icon">📊</span>市場與商業壁壘<span class="count">9</span></div>
+  <div class="tab" onclick="switchTab('crossdomain')"><span class="tab-icon">⚡</span>跨界新知<span class="count">11</span></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ═══════════════════════════════════════ OVERVIEW ═══ -->
+  <div class="section active" id="section-overview">
+    <div class="summary-bar">
+      <div class="summary-kpi">
+        <div class="kpi-label">本週情報條目</div>
+        <div class="kpi-value" style="color: var(--accent-blue)">34</div>
+        <div class="kpi-desc">涵蓋科學、市場、跨界三大領域</div>
+      </div>
+      <div class="summary-kpi">
+        <div class="kpi-label">乳清蛋白 WPC 現貨價</div>
+        <div class="kpi-value" style="color: var(--accent-orange)">€20,000<small style="font-size:14px">/MT</small></div>
+        <div class="kpi-desc">GLP-1 需求驅動歷史新高（2026.04）</div>
+      </div>
+      <div class="summary-kpi">
+        <div class="kpi-label">精製鹿角菜膠現貨價</div>
+        <div class="kpi-value" style="color: var(--accent-orange)">$8,700<small style="font-size:14px">/MT</small></div>
+        <div class="kpi-desc">颱風 + 冰冰病導致產量↓7–9%</div>
+      </div>
+      <div class="summary-kpi">
+        <div class="kpi-label">亞太通膨率 2026</div>
+        <div class="kpi-value" style="color: #ff6666)">4.6%</div>
+        <div class="kpi-desc">vs 2025年 1.4%，植物油年漲 13.2%</div>
+      </div>
+      <div class="summary-kpi">
+        <div class="kpi-label">精準發酵市場 CAGR</div>
+        <div class="kpi-value" style="color: var(--accent-lime)">48.6%</div>
+        <div class="kpi-desc">亞太地區引領全球成長</div>
+      </div>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-section s1">
+        <div class="overview-section-title" style="color: var(--accent-blue)">🔬 科學底層機制精選</div>
+        <div class="ov-items">
+          <div class="ov-item" onclick="switchTab('science')">
+            <div class="ov-item-title">KGM:κ-卡拉膠 1:2 熵驅動增效凝膠</div>
+            <div class="ov-item-summary">KGM 降低卡拉膠螺旋成核的熵懲罰，最大化 WHC 與硬度</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('science')">
+            <div class="ov-item-title">K⁺ 濃度線性控制 κ-卡拉膠凝膠強度</div>
+            <div class="ov-item-summary">K⁺ 中和硫酸基電荷，實現雙螺旋聚集密度精準調控</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('science')">
+            <div class="ov-item-title">RS5 形成：飽和脂肪酸遠優於不飽和</div>
+            <div class="ov-item-summary">V型澱粉螺旋的幾何適配性決定 RS5 穩定度</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('science')">
+            <div class="ov-item-title">超音波美拉德糖化：效率提升 4 倍</div>
+            <div class="ov-item-summary">空化加速 Amadori 重排，60 分鐘達成傳統法 16 小時效果</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('science')">
+            <div class="ov-item-title">膠原蛋白來源 > 分子量對生物活性</div>
+            <div class="ov-item-summary">消化蛋白酶使不同 MW 收斂至相同二肽，動物來源更關鍵</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overview-section s2">
+        <div class="overview-section-title" style="color: var(--accent-lime)">📊 市場護城河精選</div>
+        <div class="ov-items">
+          <div class="ov-item" onclick="switchTab('market')">
+            <div class="ov-item-title">Nextida 成立：$15 億年收入膠原巨頭</div>
+            <div class="ov-item-summary">Darling + Tessenderlo 合併，控制垂直整合供應鏈護城河</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('market')">
+            <div class="ov-item-title">GLP-1 藥物創造 $260 億食品新市場</div>
+            <div class="ov-item-summary">酪蛋白+膠原胜肽成 GLP-1 族群「肌肉保存+飽足感」核心原料</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('market')">
+            <div class="ov-item-title">乳清結構性供應上限 → 價格多年頂</div>
+            <div class="ov-item-summary">乳清為乳酪副產物，供給彈性極低，需求衝擊直接抬升膠原替代需求</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('market')">
+            <div class="ov-item-title">刺槐豆膠地中海帶地理護城河</div>
+            <div class="ov-item-summary">角豆樹數十年方成熟，任何需求衝擊均立即重新定價</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overview-section s3">
+        <div class="overview-section-title" style="color: var(--accent-purple)">⚡ 跨界啟發精選</div>
+        <div class="ov-items">
+          <div class="ov-item" onclick="switchTab('crossdomain')">
+            <div class="ov-item-title">FDA FSMA 204 生效：溯源成法規必要條件</div>
+            <div class="ov-item-summary">率先提供原料追蹤文件服務的供應商，建立最高轉換成本</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('crossdomain')">
+            <div class="ov-item-title">台海風險排名 2026 年首要地緣政治議題</div>
+            <div class="ov-item-summary">主動提供供應鏈多元化方案，是台灣業務最強差異化論述</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('crossdomain')">
+            <div class="ov-item-title">Shinise 百年企業：永續 > 成長</div>
+            <div class="ov-item-summary">消除客戶轉移原因，比強調自身優勢更能鞏固帳戶</div>
+          </div>
+          <div class="ov-item" onclick="switchTab('crossdomain')">
+            <div class="ov-item-title">Munger 逆向思考應用於客戶關係</div>
+            <div class="ov-item-summary">「什麼行為保證客戶流失？」比問「如何增加業績」更有效</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal-table">
+      <div class="signal-table-title">⚡ 本週核心行動訊號</div>
+      <table>
+        <thead>
+          <tr>
+            <th>領域</th>
+            <th>最重要訊號</th>
+            <th>建議行動</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="domain" style="color: var(--accent-blue)">食品科學</td>
+            <td class="signal">KGM:κ-卡拉膠 1:2 增效比已由 micro-DSC+AFM 實驗確認</td>
+            <td class="action">更新技術簡報，提供素食軟糖/植物基海鮮配方建議書</td>
+          </tr>
+          <tr>
+            <td class="domain" style="color: var(--accent-blue)">食品科學</td>
+            <td class="signal">RS5 三重修飾法可在 60°C 完成，無需 100°C 高溫</td>
+            <td class="action">評估對益生菌飲料/冷加工功能食品客戶的配方導入可行性</td>
+          </tr>
+          <tr>
+            <td class="domain" style="color: var(--accent-lime)">供應鏈</td>
+            <td class="signal">乳清 WPC 突破 €20,000/MT 歷史高點，且供給結構性上限</td>
+            <td class="action">主動向客戶提案魚膠原胜肽或豌豆蛋白替代方案</td>
+          </tr>
+          <tr>
+            <td class="domain" style="color: var(--accent-lime)">市場</td>
+            <td class="signal">Nextida 成立整合 Rousselot+PB Leiner，德國競爭局已批准</td>
+            <td class="action">評估膠原蛋白採購策略：Nextida vs. 獨立供應商定價動態</td>
+          </tr>
+          <tr>
+            <td class="domain" style="color: var(--accent-orange)">總體經濟</td>
+            <td class="signal">亞太通膨 4.6%，植物油年漲 13.2%，台海排名首要地緣風險</td>
+            <td class="action">為重點客戶準備「備用產地+替代原料」三維分析提案</td>
+          </tr>
+          <tr>
+            <td class="domain" style="color: var(--accent-purple)">跨界</td>
+            <td class="signal">FDA FSMA 204 生效，溯源成法規門檻而非賣點</td>
+            <td class="action">建立原料追蹤文件服務包，作為差異化帳戶服務工具</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCIENCE ═══ -->
+  <div class="section" id="section-science">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-label" style="color: var(--accent-blue)">▶ Agent 01 · Food Science</div>
+        <div class="section-title">科學底層機制與原料情報</div>
+        <div class="section-subtitle">第一性原理 · 實驗數據 · 分子機制 · 應用技術</div>
+      </div>
+      <div class="section-stats">
+        <div class="stat-chip"><span class="num">14</span> 條情報</div>
+        <div class="stat-chip"><span class="num">7</span> 原料類別</div>
+        <div class="stat-chip" style="color: var(--accent-blue)">2025–2026 最新</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+
+      <!-- C1 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">膠原蛋白</span><span class="tag orange">臨床 RCT</span></div>
+          <span class="card-number">#01</span>
+        </div>
+        <div class="card-title">來源 > 分子量：消化蛋白酶使不同 MW 收斂至相同生物活性二肽</div>
+        <div class="card-summary">GI 道蛋白酶迅速裂解 2,000 Da 與 5,000 Da 膠原水解物，使血漿羥脯氨酸攝取量相等；決定生物活性的是 Pro-Hyp、Gly-Pro-Hyp 二/三肽指紋，而動物來源（魚 vs 豬 vs 牛）比分子量更能決定此指紋組成。</div>
+        <div class="expand-btn"><span>展開詳細數據</span><span class="expand-icon">▾</span></div>
+        <div class="card-detail">
+          <p><strong>核心數據：</strong> 隨機雙盲交叉試驗（n=健康受試者）；血漿 Hyp 攝取：2,000 Da = 5,000 Da（無顯著差異）；含 Hyp 二肽（非游離氨基酸）為主要吸收形式，確認整體吸收。</p>
+          <p><strong>配方應用：</strong> 訴求關節/皮膚功效時，應優先選擇具明確 Gly-Pro-Hyp 和 Pro-Hyp 指紋的膠原蛋白，並選用能產生這些二肽的特定膠原酶，而非單純追求低 MW。</p>
+          <p><strong>來源：</strong> Frontiers in Nutrition / PMC (2024)</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-source">PMC / Frontiers in Nutrition</span>
+          <span class="card-date">2024</span>
+        </div>
+      </div>
+
+      <!-- C2 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">膠原蛋白</span><span class="tag lime">魚來源</span></div>
+          <span class="card-number">#02</span>
+        </div>
+        <div class="card-title">魚源 &lt;6 kDa 膠原胜肽：透過 Gly-Pro-Hyp 訊號通路刺激軟骨細胞合成</div>
+        <div class="card-summary">來自巴沙魚皮的酵素水解第一型膠原蛋白（&lt;6 kDa），在膝關節骨關節炎 RCT 中顯示透過 Gly-Pro-Hyp 三肽訊號通路刺激軟骨細胞膠原蛋白合成，而非僅提供氨基酸底物；魚皮作為海洋膠原替代來源成本效益正在優化。</div>
+        <div class="card-footer">
+          <span class="card-source">Frontiers in Nutrition</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C3 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">明膠</span><span class="tag blue">鹿角菜膠</span></div>
+          <span class="card-number">#03</span>
+        </div>
+        <div class="card-title">魚明膠 + 精製 κ-卡拉膠（硫酸鹽含量 23.25%）：氫鍵共網絡彌補低 Bloom 缺陷</div>
+        <div class="card-summary">魚明膠因亞氨基酸含量低（~16-18% vs 豬 ~21-24%）而凝膠強度不足；加入精製 κ-卡拉膠後，以氫鍵形成異多聚體聚集物。<strong>關鍵變數</strong>：硫酸鹽含量（23.25% = 臨界閾值），低於此值效果有限。</div>
+        <div class="expand-btn"><span>展開詳細數據</span><span class="expand-icon">▾</span></div>
+        <div class="card-detail">
+          <p><strong>核心數據：</strong> 精製 κ-卡拉膠（硫酸鹽 23.25%）> 半精製（硫酸鹽較低）的凝膠強化效果；結構分析確認卡拉膠在魚明膠鏈上形成聚集物，增加氫鍵密度和網絡緊密度。</p>
+          <p><strong>配方應用：</strong> 清真/猶太認證配方以魚明膠取代豬明膠時，搭配 ≥23% 硫酸鹽含量的精製 κ-卡拉膠，可在糖果或藥用膠囊應用中達到同等 Bloom 性能。</p>
+          <p><strong>來源：</strong> PMC (2025)</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-source">PMC</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C4 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag orange">澱粉</span><span class="tag lime">RS5</span></div>
+          <span class="card-number">#04</span>
+        </div>
+        <div class="card-title">RS5 形成機制：飽和脂肪酸幾何適配 V 型螺旋空腔，穩定性遠優於不飽和 FA</div>
+        <div class="card-summary">RS5 透過糊化澱粉酶鏈形成 V 型左手單螺旋（螺距 ~0.8 nm/葡萄糖單元）包覆脂肪酸疏水尾部（范德瓦耳斯力）。飽和 FA（C14–C18）因幾何適配性遠優於不飽和 FA 形成更穩定複合物。去支鏈處理可延長可用直鏈澱粉，提升包覆效率。</div>
+        <div class="expand-btn"><span>展開詳細數據</span><span class="expand-icon">▾</span></div>
+        <div class="card-detail">
+          <p><strong>核心數據：</strong> 形成需 &gt;100°C 使澱粉完全糊化；X 射線衍射確認 V 型結晶指數：飽和 FA &gt;&gt; 不飽和 FA；RS5 抵抗胰臟澱粉酶消化，完整到達結腸，優先促進雙歧桿菌生長和丁酸鹽產生。</p>
+          <p><strong>配方應用：</strong> RS5 可在澱粉烹調時與棕櫚酸或硬脂酸共加工原位製備，無需化學交聯，實現清潔標籤腸道健康訴求。</p>
+          <p><strong>來源：</strong> ACS Omega / PMC (2024–2025)</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-source">ACS Omega / PMC</span>
+          <span class="card-date">2024–2025</span>
+        </div>
+      </div>
+
+      <!-- C5 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag orange">澱粉</span><span class="tag purple">三重修飾</span></div>
+          <span class="card-number">#05</span>
+        </div>
+        <div class="card-title">三重修飾策略：去支鏈 + 超音波降晶 + 脂質複合，在 ~60°C 完成 RS5</div>
+        <div class="card-summary">序列應用：①酵素去支鏈 ②超音波破壞結晶度 ③脂質複合化，在 ~60°C 達到與傳統高溫法等效的 RS 含量；超音波步驟是關鍵：降低顆粒結晶度，使直鏈澱粉鏈在低溫下暴露，可供脂質複合。</div>
+        <div class="card-footer">
+          <span class="card-source">ScienceDirect (Food Hydrocolloids)</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C6 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">乳清蛋白</span><span class="tag lime">美拉德反應</span></div>
+          <span class="card-number">#06</span>
+        </div>
+        <div class="card-title">超音波輔助美拉德糖化：糖化度 49.6%（60 分鐘）vs 傳統 12.4%（16 小時），4 倍效率提升</div>
+        <div class="card-summary">空化產生的分子碰撞加速 Amadori 重排步驟，在限制溫度積累的同時抑制類黑精（melanoidins）生成；產生酸穩定 WPI 共軛物（pH 4.6–5.2），解決低 pH 蛋白飲料配方中 WPI 沉澱的核心問題。</div>
+        <div class="expand-btn"><span>展開詳細數據</span><span class="expand-icon">▾</span></div>
+        <div class="card-detail">
+          <p><strong>核心數據：</strong> 糖化度 49.6%（超音波，60 min）vs 12.4%（傳統乾熱，16 h）；褐變強度降低；在酸性 pH（接近等電點 4.6–5.2）蛋白質溶解度提高；較高寡糖比例在共軛物中進一步增強酸穩定溶解度。</p>
+          <p><strong>配方應用：</strong> 超音波輔助糖化可製備酸穩定 WPI 共軛物，用於酸化飲料、果香蛋白飲料及低 pH 營養產品，同時原生 WPI 在這些場合會沉澱。</p>
+          <p><strong>來源：</strong> Frontiers in Nutrition (2025)</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-source">Frontiers in Nutrition</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C7 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">乳清蛋白</span><span class="tag orange">乳化</span></div>
+          <span class="card-number">#07</span>
+        </div>
+        <div class="card-title">真空熱反應 WPI-葡聚糖美拉德共軛物：乳化能力提升 12%，無類黑精異味</div>
+        <div class="card-summary">真空條件防止氧化降解，實現更選擇性的 Lys-ε 氨基附著至葡聚糖還原末端；產生的共軛物具有增強的表面疏水性（部分展開）和多糖鏈位阻穩定，兩者共同貢獻類皮克林界面機制，乳化能力提升 ~12%。</div>
+        <div class="card-footer">
+          <span class="card-source">ScienceDirect (LWT)</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C8 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag purple">酪蛋白</span><span class="tag blue">奈米包覆</span></div>
+          <span class="card-number">#08</span>
+        </div>
+        <div class="card-title">人工/再成形酪蛋白膠束（ACM/RCM）：pH 循環法（pH 10→4.5）可規模化，無需高壓設備</div>
+        <div class="card-summary">天然酪蛋白膠束的疏水結合位點被膠束組裝佔據；ACM（人工膠束）和 RCM（再成形）工程法釋放這些位點：RCM 的 pH 循環（pH 10→11 再酸化）無需昂貴高壓設備，可規模化包覆維生素 D、omega-3、多酚，提升生物利用率和貨架穩定性。</div>
+        <div class="card-footer">
+          <span class="card-source">Critical Reviews in Food Science (Taylor & Francis)</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C9 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag orange">食品香料</span><span class="tag lime">微膠囊化</span></div>
+          <span class="card-number">#09</span>
+        </div>
+        <div class="card-title">電流體動力學（靜電紡絲/噴霧）：常溫操作保留揮發性香料，避免噴霧乾燥損失</div>
+        <div class="card-summary">傳統噴霧乾燥的快速溶劑蒸發驅動揮發性香料遷移；靜電紡/噴利用電場霧化，無加熱過程，保留熱敏感和高揮發性化合物；植物基壁材（菊糖、半纖維素、豌豆蛋白）替代麥芽糊精/阿拉伯膠，符合清潔標籤。</div>
+        <div class="card-footer">
+          <span class="card-source">ACS Journal of Agricultural and Food Chemistry</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C10 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag purple">精準發酵</span><span class="tag lime">香料</span></div>
+          <span class="card-number">#10</span>
+        </div>
+        <div class="card-title">精準發酵合成天然等同香料：用地面積減少 95%、用水量減少 80%，資格符合「天然」標籤</div>
+        <div class="card-summary">CRISPR 編輯的酵母菌（釀酒酵母/畢赤酵母）透過生物合成路徑模組生產內酯、酯類、萜烯類香料，與農業來源化學等同；多組學數據整合和計算代謝模型消除路徑瓶頸；在多數法律框架下符合天然標籤資格。</div>
+        <div class="card-footer">
+          <span class="card-source">ScienceDirect (Current Research in Food Science)</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C11 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">蒟蒻</span><span class="tag blue">鹿角菜膠</span><span class="tag orange">增效</span></div>
+          <span class="card-number">#11</span>
+        </div>
+        <div class="card-title">KGM:κ-卡拉膠 增效凝膠：熵增驅動螺旋成核，最適比 1:2（micro-DSC + AFM 確認）</div>
+        <div class="card-summary">KGM 不共組裝進入 κ-卡拉膠雙螺旋；而是破壞卡拉膠鏈周圍水結構，降低螺旋成核的熵懲罰（熵增機制）。KGM 本身保持無序狀態，作為柔性基質填充物橋接螺旋結構域，減少脆性。最大 WHC 和硬度：KGM:KC = 1:2。</div>
+        <div class="expand-btn"><span>展開詳細數據</span><span class="expand-icon">▾</span></div>
+        <div class="card-detail">
+          <p><strong>核心數據：</strong> 透過微量 DSC、流變儀和原子力顯微鏡研究；WHC 和凝膠硬度在 KGM:κ-卡拉膠 = 1:2 時最大化；粘彈性（G', G''）可透過改變混合比例在寬範圍內調節；KGM 不參與螺旋結構（AFM 成像確認）。</p>
+          <p><strong>配方應用：</strong> KGM:κ-卡拉膠 = 1:2 是最大化紋理性能的實驗驗證最佳比例；此比例的 KGM 減少離漿和脆性，適用於純素軟糖、乳製品類似物和重組海鮮應用。</p>
+          <p><strong>來源：</strong> International Journal of Biological Macromolecules / PubMed (2024)</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-source">Int. J. Biol. Macromolecules / PubMed</span>
+          <span class="card-date">2024</span>
+        </div>
+      </div>
+
+      <!-- C12 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">鹿角菜膠</span><span class="tag orange">K⁺ 離子</span></div>
+          <span class="card-number">#12</span>
+        </div>
+        <div class="card-title">K⁺ 濃度線性控制 κ-卡拉膠雙螺旋聚集密度：精準調控凝膠強度的最低成本工具</div>
+        <div class="card-summary">K⁺ 離子結合相鄰螺旋鏈上的硫酸根陰離子，中和靜電排斥，實現螺旋-螺旋聚集形成物理交聯點。低 [K⁺]：孤立雙螺旋，弱凝膠；增加 [K⁺]：聚集密度線性增加 → 凝膠強度增加。超過最佳 K⁺ 視窗：鹽析和沉澱（SAXS/WAXS 確認）。</div>
+        <div class="card-footer">
+          <span class="card-source">MDPI Gels</span>
+          <span class="card-date">2025</span>
+        </div>
+      </div>
+
+      <!-- C13 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">多醣複合</span><span class="tag lime">刺槐豆膠</span></div>
+          <span class="card-number">#13</span>
+        </div>
+        <div class="card-title">LBG 的非離子特性：與 κ-卡拉膠直接結合，pH 無關，將脆性斷裂轉為彈性斷裂</div>
+        <div class="card-summary">LBG 無取代甘露聚糖區（「光滑」區）直接結合 κ-卡拉膠雙螺旋；LBG 非離子：不受 pH 或鹽影響，是 κ-卡拉膠體系中最可靠的脆性減少劑。低凝膠膠結蘭膠（LA 膠結蘭膠）形成熱穩定支架；三元系統（κ-卡拉膠+LBG+KGM）產生可調 WHC 和流變學。</div>
+        <div class="card-footer">
+          <span class="card-source">ScienceDirect (Food Hydrocolloids)</span>
+          <span class="card-date">2024</span>
+        </div>
+      </div>
+
+      <!-- C14 -->
+      <div class="card science" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag purple">三仙膠</span><span class="tag blue">蒟蒻</span><span class="tag lime">冷凍解凍</span></div>
+          <span class="card-number">#14</span>
+        </div>
+        <div class="card-title">XG-KGM 增效互作膠（SIG）：冷凍解凍後 G' 反增，A 型和 B 型兩種結合機制</div>
+        <div class="card-summary">XG-KGM 系統有兩種結合類型：A 型（KGM + 有序螺旋狀三仙膠，40°C 以下形成）為冷凍解凍穩定主力；B 型（KGM + 無序三仙膠）在高溫下主導。冷凍解凍優先強化 A 型結合（驅逐未凍結水，迫使更緊密的螺旋-鏈接觸），使凝膠力學性能因冷凍解凍而增強，而非降解。</div>
+        <div class="card-footer">
+          <span class="card-source">ScienceDirect (Food Hydrocolloids)</span>
+          <span class="card-date">2023–2024</span>
+        </div>
+      </div>
+
+    </div><!-- /cards-grid -->
+  </div><!-- /section-science -->
+
+  <!-- ═══════════════════════════════════════ MARKET ═══ -->
+  <div class="section" id="section-market">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-label" style="color: var(--accent-lime)">▶ Agent 02 · Market Intelligence</div>
+        <div class="section-title">市場動態與商業壁壘</div>
+        <div class="section-subtitle">供應鏈異動 · 新品應用 · 護城河分析 · 價值投資視角</div>
+      </div>
+      <div class="section-stats">
+        <div class="stat-chip"><span class="num">9</span> 條情報</div>
+        <div class="stat-chip" style="color: var(--accent-orange)">供應鏈警戒</div>
+      </div>
+    </div>
+
+    <div class="cards-grid wide">
+
+      <!-- M1 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag lime">GLP-1</span><span class="tag blue">蛋白質</span><span class="tag orange">市場</span></div>
+          <span class="card-number">#M01</span>
+        </div>
+        <div class="card-title">GLP-1 藥物（Ozempic/Wegovy）帶動 $260 億食品飲料新市場：膠原蛋白+酪蛋白成核心原料</div>
+        <div class="card-summary">GLP-1 用藥族群結構性創造「肌肉保存+飽足感」需求，預計到 2034 年食品飲料市場達 $260 億。慢釋氨基酸譜的酪蛋白和膠原胜肽成為功能上可信的核心原料；Danone、Nestlé、Absolute Collagen、PortionIQ 已推出針對性 SKU。</div>
+        <div class="card-insight">新的結構性需求層（不是潮流循環），為接下來 5–10 年提供世俗順風，應積極對客戶提案酪蛋白+膠原蛋白複合功能配方。</div>
+        <div class="card-footer">
+          <span class="card-source">FoodNavigator-USA / BeverageDaily</span>
+          <span class="card-date">Jan–Apr 2026</span>
+        </div>
+      </div>
+
+      <!-- M2 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag lime">膠原蛋白</span><span class="tag orange">護城河</span></div>
+          <span class="card-number">#M02</span>
+        </div>
+        <div class="card-title">Nextida 成立：Rousselot + PB Leiner 合併，$15 億年收入，23 廠，德國競爭局 2026/04 批准</div>
+        <div class="card-summary">Darling Ingredients + Tessenderlo Group 創立 Nextida，成為十年來明膠/膠原蛋白產業最重大整合。護城河三要素：①垂直整合原料（Darling 屠宰場廢料 → Rousselot）；②具臨床數據的專利 BCP（VERISOL, FORTIBONE, FORTIGEL）；③品牌配方轉換成本極高（重新取得健康聲稱需重跑臨床）。</div>
+        <div class="card-insight">Buffett 視角：Nextida 是收費公路型生意，從全球膠原蛋白健康趨勢中抽取通行費；監控其是否利用整合優勢壓縮非 Nextida 膠原蛋白定價空間。</div>
+        <div class="expand-btn"><span>展開護城河分析</span><span class="expand-icon">▾</span></div>
+        <div class="card-detail">
+          <p><strong>Buffett 護城河評估：</strong> 主要風險是 72% 原料來源依賴牛/豬屠宰量（周期性投入成本）。非 Nextida 供應商如 GELITA 面臨更大定價壓力，但臨床數據飛輪仍是其防禦核心。</p>
+          <p><strong>戰略意涵：</strong> 如果您的採購涉及 Rousselot 或 PB Leiner，考慮評估 Nextida 整合後的定價動態，並提前建立備用供應商關係。</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-source">Food Dive / BusinessWire / NutritionInsight</span>
+          <span class="card-date">Apr–May 2026</span>
+        </div>
+      </div>
+
+      <!-- M3 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag orange">乳清蛋白</span><span class="tag red">供應警戒</span></div>
+          <span class="card-number">#M03</span>
+        </div>
+        <div class="card-title">乳清 WPC 突破 €20,000/MT 歷史新高：GLP-1 需求 + 供給結構性上限 = 多年高價格</div>
+        <div class="card-summary">乳清為乳酪副產物，供給受乳酪產量硬性上限，短期無法擴充；GLP-1 驅動的需求衝擊不能被快速增加的供給吸收，帶來多年定價順風，同時為膠原胜肽和豌豆蛋白作為替代品打開市場進入視窗。</div>
+        <div class="card-insight">主動向高蛋白配方客戶提案「乳清替代方案清單」（魚膠原 &lt;6kDa、豌豆蛋白、酪蛋白），定位為成本風險管理服務，不只是原料推銷。</div>
+        <div class="card-footer">
+          <span class="card-source">EDairy News / DairyReporter</span>
+          <span class="card-date">Apr 30, 2026</span>
+        </div>
+      </div>
+
+      <!-- M4 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">鹿角菜膠</span><span class="tag red">供應警戒</span></div>
+          <span class="card-number">#M04</span>
+        </div>
+        <div class="card-title">颱風 + 冰冰病（Ice-Ice Disease）使全球紅藻產量下降 7–9%，精製鹿角菜膠達 $8,700/MT</div>
+        <div class="card-summary">超過 72% 的全球紅藻供應來自印尼和菲律賓，氣候變率和病害周期正在加劇，精製等級已達 $6,400–8,700/MT（高端 $8,900/MT）；沒有長期供應協議或次要來源的買家面臨全額暴露。</div>
+        <div class="card-insight">向使用鹿角菜膠的客戶主動討論 LBG+KGM 部分替代策略（功能性協同，前述科學數據支持），降低其單點供應風險。</div>
+        <div class="card-footer">
+          <span class="card-source">GPI Global / ChemTradeAsia</span>
+          <span class="card-date">Q1–Q2 2026</span>
+        </div>
+      </div>
+
+      <!-- M5 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag purple">刺槐豆膠</span><span class="tag orange">地理護城河</span></div>
+          <span class="card-number">#M05</span>
+        </div>
+        <div class="card-title">刺槐豆膠（LBG）地中海帶地理護城河：角豆樹數十年方成熟，$4,500–5,200/MT FOB</div>
+        <div class="card-summary">角豆樹種植限於地中海窄帶，數十年才能成熟，形成實際上不可複製的供給約束——任何需求衝擊（乾旱、收成失敗）立即重新定價市場；當前價格相較 2021 年危機水平是相對的買入視窗。</div>
+        <div class="card-footer">
+          <span class="card-source">FoodDive / Chemtradeasia</span>
+          <span class="card-date">May 2026</span>
+        </div>
+      </div>
+
+      <!-- M6 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">蒟蒻</span><span class="tag orange">供應集中</span></div>
+          <span class="card-number">#M06</span>
+        </div>
+        <div class="card-title">蒟蒻持續結構性短缺：3–5 年成熟周期，雲南/四川集中；全球市場 $15.2 億，CAGR 8.8%</div>
+        <div class="card-summary">蒟蒻 3–5 年生長周期使供給擴張本質上滯後於需求；擁有雲南/四川農民契作的供應商擁有結構性成本和可用性優勢，現貨採購者受制於價格波動。全球市場 2026 年 $15.2 億，CAGR 8.8%。</div>
+        <div class="card-footer">
+          <span class="card-source">SkyQuestT / Root-China</span>
+          <span class="card-date">2026 Market Analysis</span>
+        </div>
+      </div>
+
+      <!-- M7 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag lime">GELITA</span><span class="tag blue">新品</span></div>
+          <span class="card-number">#M07</span>
+        </div>
+        <div class="card-title">GELITA 三連發：CURADERM（皮膚屏障）、PeptENDURE（耐力運動）、OPTIBAR（高蛋白棒），拓展 BCP 產品梯</div>
+        <div class="card-summary">GELITA 持續以命名、商標化的生物活性膠原胜肽（BCP）深化產品梯：CURADERM（Vitafoods Europe 2026 亮相，皮膚屏障/牙齦健康）、PeptENDURE（耐力）對抗乳清高價、OPTIBAR（蛋白棒黏結解決方案，最高 60% 蛋白質）。臨床數據飛輪是核心護城河：每項研究既驗證成分，又為監管/行銷彈藥設置競爭門檻。</div>
+        <div class="card-footer">
+          <span class="card-source">Nutraceutical Business Review / FoodNavigator</span>
+          <span class="card-date">Mar–May 2026</span>
+        </div>
+      </div>
+
+      <!-- M8 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag purple">CP Kelco</span><span class="tag lime">護城河</span></div>
+          <span class="card-number">#M08</span>
+        </div>
+        <div class="card-title">CP Kelco（三仙膠/結蘭膠）：發酵基礎設施 + 菌株知識產權 = 食品膠體中最強寬護城河</div>
+        <div class="card-summary">工業規模三仙/結蘭膠生產需要專有微生物菌株、無菌發酵槽和複雜下游純化（新廠估算資本支出 $2億+）；CP Kelco 在結蘭膠市場佔估算 >50%，提供阻止新進入者的單位成本優勢；結蘭膠在蛋白質飲料的應用（懸浮不溶性蛋白）形成配方鎖定。</div>
+        <div class="card-insight">Buffett 評估：最強的寬護城河——發酵基礎設施、菌株智慧財產和規模三者結合，使攻擊在經濟上缺乏吸引力；弱點是客戶替代為澱粉基質構劑以降低成本。</div>
+        <div class="card-footer">
+          <span class="card-source">FoodNavigator / FutureMarketInsights</span>
+          <span class="card-date">2026</span>
+        </div>
+      </div>
+
+      <!-- M9 -->
+      <div class="card market" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag orange">凍優格</span><span class="tag blue">多功能膠體</span></div>
+          <span class="card-number">#M09</span>
+        </div>
+        <div class="card-title">KGM + WPI 複合凝膠：凍融穩定凍優格，「系統原料」策略鎖定客戶採購決策</div>
+        <div class="card-summary">KGM 與乳清蛋白分離物組合的複合凝膠在冷凍解凍週期中，創造任一單獨成分都無法實現的質構穩定性；這種「系統原料」依賴性驅動較高的每單位價值捕捉，使銷售複合解決方案而非商品單一成分的供應商具有差異化優勢。</div>
+        <div class="card-footer">
+          <span class="card-source">Food Hydrocolloids (ScienceDirect)</span>
+          <span class="card-date">2025–2026</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /section-market -->
+
+  <!-- ═══════════════════════════════════════ CROSSDOMAIN ═══ -->
+  <div class="section" id="section-crossdomain">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-label" style="color: var(--accent-purple)">▶ Agent 03 · Cross-Domain Intelligence</div>
+        <div class="section-title">跨界新知與多元思維模型</div>
+        <div class="section-subtitle">科技・總經・地緣・Munger哲學・日本匠人精神</div>
+      </div>
+      <div class="section-stats">
+        <div class="stat-chip"><span class="num">11</span> 條情報</div>
+        <div class="stat-chip" style="color: var(--accent-purple)">每項含跨界啟發</div>
+      </div>
+    </div>
+
+    <div class="cards-grid wide">
+
+      <!-- X1 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">區塊鏈</span><span class="tag orange">法規</span></div>
+          <span class="card-number">#X01</span>
+        </div>
+        <div class="card-title">FDA FSMA Rule 204 生效（2026/01）：食品溯源從差異化賣點升級為法規必要條件</div>
+        <div class="card-summary">食品追蹤清單上的所有業者須維護完整的關鍵追蹤事件（Critical Tracking Events）跨供應鏈記錄；區塊鏈溯源市場預估從 2026 年 $17.7 億增長至 2031 年 $124 億（CAGR 47.65%）；召回反應時間從數天縮短至秒級。</div>
+        <div class="card-insight">率先協助客戶建立符合 FSMA 204 標準的原料追蹤文件體系的供應商，將獲得極高的客戶黏著度與轉換成本護城河——溯源服務包是最強差異化工具之一。</div>
+        <div class="card-footer">
+          <span class="card-source">CXTMS / FDA FSMA Documentation</span>
+          <span class="card-date">Jan 2026 施行</span>
+        </div>
+      </div>
+
+      <!-- X2 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag purple">AI 配方</span><span class="tag lime">科技</span></div>
+          <span class="card-number">#X02</span>
+        </div>
+        <div class="card-title">AI 驅動食品配方：NotCo Giuseppe 分析 10 億種原料組合；市場從 $150 億→$1,400 億（CAGR 28%）</div>
+        <div class="card-summary">NotCo 的 AI 平台透過機器學習識別最佳植物性原料組合；Journey Foods 平台同時評估超過 10 億種原料組合，依據營養密度、過敏原性、成本與永續性最佳化。食品加工 AI 市場 2025 年約 $150 億，2034 年約 $1,400 億。</div>
+        <div class="card-insight">能提供客戶 AI 輔助配方建議的業務代表，將從「原料銷售員」進化為「研發夥伴」，大幅提升客戶依賴程度。</div>
+        <div class="card-footer">
+          <span class="card-source">IFT Food Technology / Journey Foods</span>
+          <span class="card-date">2026</span>
+        </div>
+      </div>
+
+      <!-- X3 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag lime">精準發酵</span><span class="tag blue">亞太</span></div>
+          <span class="card-number">#X03</span>
+        </div>
+        <div class="card-title">精準發酵商業化元年：亞太 CAGR 48.6% 引領全球，蛋白質類別佔市場 48%</div>
+        <div class="card-summary">2026 年精準發酵從「概念驗證」跨入「商業規模競爭」；B2B 供應商：Perfect Day、Vivici、Remilk、The Every Company；酪蛋白/乳清/乳鐵蛋白佔市場份額 ~48%；CRISPR + 自動化生產將新品開發週期從數月縮至數週；亞太 CAGR 48.6%，由各國生物製造產業政策驅動。</div>
+        <div class="card-insight">精準發酵蛋白正從側翼演化為主流，提前布局發酵酪蛋白/乳清蛋白客戶引導，能在下一代產品開發週期中佔據核心位置。</div>
+        <div class="card-footer">
+          <span class="card-source">GlobeNewswire (Apr 27, 2026)</span>
+          <span class="card-date">Apr 27, 2026</span>
+        </div>
+      </div>
+
+      <!-- X4 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag red">總體經濟</span><span class="tag orange">通膨</span></div>
+          <span class="card-number">#X04</span>
+        </div>
+        <div class="card-title">亞太通膨 2026 年飆至 4.6%（2025 年僅 1.4%）：西亞衝突推升能源→糧食→化肥三重成本</div>
+        <div class="card-summary">聯合國亞太經社會（UN ESCAP）警告亞太通膨 4.6%（vs 2025 年 1.4%）；全球 1/3 化肥貿易流經荷姆茲海峽，肥料價格預估漲 31%；FAO 食品價格指數 3 月 128.5 點，植物油年增 13.2%；根本驅動力：西亞衝突推升能源成本。</div>
+        <div class="card-insight">成本壓力攀升環境中，能協助客戶找到「同功能、更低採購風險」替代原料的業務夥伴，成為客戶最珍視的合作對象。</div>
+        <div class="card-footer">
+          <span class="card-source">UN ESCAP / IMF Spring Meetings Apr 2026</span>
+          <span class="card-date">Apr 16, 2026</span>
+        </div>
+      </div>
+
+      <!-- X5 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag red">地緣政治</span><span class="tag orange">台海</span></div>
+          <span class="card-number">#X05</span>
+        </div>
+        <div class="card-title">台海緊張局勢列 2026 年首要地緣政治風險：Chatham House 估計影響遠超荷姆茲海峽封鎖</div>
+        <div class="card-summary">查塔姆研究所 2026 年 4 月報告：台灣危機對全球經濟的衝擊將遠超荷姆茲海峽封鎖；台灣海峽負責全球 ~30% 貨櫃運輸量；可可 5 月 7 日漲幅 5.42%，單月 +33.22%，大宗商品市場反映地緣風險正在定價。</div>
+        <div class="card-insight">身為台灣食品原料業者，主動提供「供應鏈多元化替代方案」（備用供應商、備用產地、安全庫存建議）是建立差異化信任的最有力商業論述。</div>
+        <div class="card-footer">
+          <span class="card-source">Chatham House / South China Morning Post (Apr 2026)</span>
+          <span class="card-date">Apr 2026</span>
+        </div>
+      </div>
+
+      <!-- X6 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag orange">關稅</span><span class="tag blue">貿易</span></div>
+          <span class="card-number">#X06</span>
+        </div>
+        <div class="card-title">美國關稅壓力持續 + 貿易碎片化：麥肯錫報告「採購多元化從選項變為必需」</div>
+        <div class="card-summary">美國最高法院裁定 2025 年部分關稅違憲，但新替代法律依據立即啟動新限制；麥肯錫 2026 年報告：貿易格局核心特徵是「經濟安全與地緣政治深度融合」；全球貿易碎片化持續，食品原料採購多元化策略從「選項」變為「必需」。</div>
+        <div class="card-insight">貿易碎片化使客戶採購決策越來越複雜，能提供「產地-關稅-替代品三維分析」的業務代表，比只提供報價單的競爭者擁有顯著議價優勢。</div>
+        <div class="card-footer">
+          <span class="card-source">McKinsey Global Institute / FoodNavigator</span>
+          <span class="card-date">2026</span>
+        </div>
+      </div>
+
+      <!-- X7 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag orange">Munger</span><span class="tag purple">思維模型</span></div>
+          <span class="card-number">#X07</span>
+        </div>
+        <div class="card-title">Munger 格架思維三核心：逆向思考 × 能力圈 × 激勵機制分析</div>
+        <div class="card-summary">2026 年商業策略廣泛引用：①逆向（Inversion）：不問「如何成功」，而問「什麼行為保證失敗」；②能力圈（Circle of Competence）：只在真正理解的領域競爭；③激勵機制分析：「若你想理解行為，先看激勵結構」。Munger 不尋找一年贏家，而是探究「為何某些公司能持續數十年獲勝」。</div>
+        <div class="card-insight">用「逆向思考」檢視客戶關係：一個客戶最容易在什麼情況下轉向競爭對手？消除那些因素，比強調自身優勢更能有效鞏固帳戶。</div>
+        <div class="card-footer">
+          <span class="card-source">New Trader U / CMQ Investing</span>
+          <span class="card-date">Feb–Apr 2026</span>
+        </div>
+      </div>
+
+      <!-- X8 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">老舖</span><span class="tag lime">百年企業</span></div>
+          <span class="card-number">#X08</span>
+        </div>
+        <div class="card-title">Shinise 百年企業哲學：永續 > 成長；淨利潤率 5.5%（全國平均 2.7% 的 2 倍）</div>
+        <div class="card-summary">日本 52,000+ 百年企業核心哲學：「永續優先於成長（Sustainability at All Costs）」；四支柱：①客戶與產品品質；②長期員工關係；③明確經營信條；④變化管理。三方美好（Sanpo-Yoshi）要求對賣方、買方、社會均有貢獻。關鍵數據：淨利潤率 5.5% vs 全國平均 2.7%。</div>
+        <div class="card-insight">在每次客戶互動中，優先考慮「這個建議對客戶的長期成功有益嗎」而非「這筆交易對我今季業績有益嗎」，是建立 20 年客戶關係的唯一路徑。</div>
+        <div class="card-footer">
+          <span class="card-source">Japan House LA / IMD Business School</span>
+          <span class="card-date">持續研究</span>
+        </div>
+      </div>
+
+      <!-- X9 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag purple">物づくり</span><span class="tag lime">Kaizen</span></div>
+          <span class="card-number">#X09</span>
+        </div>
+        <div class="card-title">Monozukuri × Industry 4.0：「下一道工序即是你的客戶」打造零缺陷內部客戶鏈</div>
+        <div class="card-summary">物づくり與 Industry 4.0 融合：機器人/自動化強化精確度，人類判斷居中心。最具啟發的實踐：「下一道工序即是你的客戶」——在源頭捕捉缺陷而非留待下游，創造讓品質成為每個人責任的內部客供關係。Kaizen 強調：重大正向成果可透過許多微小的改進累積效應達成。</div>
+        <div class="card-insight">業務代表提交給技術團隊的規格資訊越精確完整，研發樣品的準確率越高，客戶驗証周期越短——這本身就是可量化展示給客戶的競爭優勢。</div>
+        <div class="card-footer">
+          <span class="card-source">GLOBIS Europe / Jidoka Tech</span>
+          <span class="card-date">2026 製造業策略</span>
+        </div>
+      </div>
+
+      <!-- X10 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag blue">第一性原理</span><span class="tag purple">業務談判</span></div>
+          <span class="card-number">#X10</span>
+        </div>
+        <div class="card-title">第一性原理 × 業務談判：從「業界怎麼做」→「這件事的本質是什麼」</div>
+        <div class="card-summary">第一性原理的本質：將問題分解到基本元素，清除所有假設後從零重建。步驟：①清晰定義問題 ②辨識所有隱含假設 ③分解至基本元素 ④不受現有框架限制重建方案。類比思維問「業界通常怎麼做」；第一性原理問「這件事的物理/化學/人類需求的本質是什麼」。2026 年典型案例：Perplexity AI 重新定義搜尋類別。</div>
+        <div class="card-insight">客戶說「我需要更穩定的乳化劑」時，第一性原理讓你先問「穩定性問題的根本原因是什麼（溫度？pH？加工剪切力？）」，而非直接推薦產品目錄中的下一個選項。</div>
+        <div class="card-footer">
+          <span class="card-source">FourWeekMBA / ProductLed</span>
+          <span class="card-date">2026</span>
+        </div>
+      </div>
+
+      <!-- X11 -->
+      <div class="card crossdomain" onclick="toggleCard(this)">
+        <div class="card-header">
+          <div class="card-tags"><span class="tag lime">行為經濟學</span><span class="tag purple">提案策略</span></div>
+          <span class="card-number">#X11</span>
+        </div>
+        <div class="card-title">行為經濟學「預設選項效應」× 食品原料提案策略：設定基準而非平等陳列</div>
+        <div class="card-summary">消費者調查：49–67% 願意嘗試含新型原料的食品；高成長平台：GLP-1 友善食品、機能性原料、混合肉品、升級再生原料（upcycled）。行為經濟學的預設選項效應：人們傾向選擇被設定為預設的選項；2026 年 FoodTech 核心敘事從「尋找突破」轉向「精煉、規模化、整合」。</div>
+        <div class="card-insight">在提案時，將你最希望客戶採用的原料設為「標準配方基準（baseline）」，其他作為替代，能顯著提高成交概率——而非平等陳列讓客戶自行比較。</div>
+        <div class="card-footer">
+          <span class="card-source">ICL Group / Future Food-Tech SF 2026</span>
+          <span class="card-date">2026</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /section-crossdomain -->
+
+</div><!-- /main -->
+
+<script>
+  function switchTab(name) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      const names = ['overview', 'science', 'market', 'crossdomain'];
+      t.classList.toggle('active', names[i] === name);
+    });
+    document.querySelectorAll('.section').forEach(s => {
+      s.classList.toggle('active', s.id === 'section-' + name);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleCard(card) {
+    card.classList.toggle('expanded');
+  }
+</script>
+</body>
+</html>
